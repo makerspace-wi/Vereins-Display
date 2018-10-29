@@ -10,8 +10,8 @@
 #define CLK_PIN   13  // blau -> Bulgin 3
 #define DATA_PIN  11  // grün -> Bulgin 1
 #define CS_PIN    10  // violett -> Bulgin 2
-#define LED_SW1   A2  // A2 auf 2 LED Display
-#define not_SW2   A3  // A3 auf 3 [not used]]
+#define LED_SW1   A2  // A2 auf 2 LED Display SW1
+#define not_SW2   A3  // A3 auf 3 [not used]  SW2
 
 // Hardware SPI connection
 MD_Parola P = MD_Parola(HARDWARE_TYPE, CS_PIN, MAX_DEVICES);

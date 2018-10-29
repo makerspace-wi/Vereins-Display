@@ -11,7 +11,7 @@
 #define DATA_PIN  11  // grün -> Bulgin 1
 #define CS_PIN    10  // violett -> Bulgin 2
 #define LED_SW1   A2  // A2 auf 2 LED Display
-#define not_SW1   A3  // A3 auf 3 [not used]]
+#define not_SW2   A3  // A3 auf 3 [not used]]
 
 // Hardware SPI connection
 MD_Parola P = MD_Parola(HARDWARE_TYPE, CS_PIN, MAX_DEVICES);
@@ -98,8 +98,8 @@ void setup()  {
   inStr.reserve(numChars); // reserve for instr serial input
   pinMode(LED_SW1,OUTPUT);
   digitalWrite(LED_SW1,LOW);
-  pinMode(not_SW1,OUTPUT);
-  digitalWrite(not_SW1,LOW);
+  pinMode(not_SW2,OUTPUT);
+  digitalWrite(not_SW2,LOW);
 }
 
 void recvWithStartEndMarkers() {
@@ -169,12 +169,12 @@ void processParsedData() {
     }
 
     if (inStr.substring(0,4) == "L2ON") { // Turn LED Lighting on
-      digitalWrite(not_SW1,HIGH);
+      digitalWrite(not_SW2,HIGH);
       Serial.println("CMD;L2ON;COMPLETED");
     }
 
     if (inStr.substring(0,5) == "L2OFF") { // Turn LED Lighting off
-      digitalWrite(not_SW1,LOW);
+      digitalWrite(not_SW2,LOW);
       Serial.println("CMD;L2OFF;COMPLETED");
     }
 

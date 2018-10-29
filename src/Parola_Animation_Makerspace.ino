@@ -5,15 +5,17 @@
 // Define the number of devices we have in the chain and the hardware interface
 // NOTE: These pin numbers will probably not work with your hardware and may
 // need to be adapted
+#define HARDWARE_TYPE MD_MAX72XX::FC16_HW
 #define MAX_DEVICES 16
 #define CLK_PIN   13  // blau -> Bulgin 3
 #define DATA_PIN  11  // grün -> Bulgin 1
 #define CS_PIN    10  // violett -> Bulgin 2
-#define LED_SW    A2  // A2 auf 2 SSR1-1
-#define L2_SW     A3  // A3 auf 3 SSR2-1 zum schalten
+#define LED_SW1   A2  // A2 auf 2 LED Display
+#define not_SW1   A3  // A3 auf 3 [not used]]
 
 // Hardware SPI connection
-MD_Parola P = MD_Parola(CS_PIN, MAX_DEVICES);
+MD_Parola P = MD_Parola(HARDWARE_TYPE, CS_PIN, MAX_DEVICES);
+//MD_Parola P = MD_Parola(CS_PIN, MAX_DEVICES);
 // Arbitrary output pins
 // MD_Parola P = MD_Parola(DATA_PIN, CLK_PIN, CS_PIN, MAX_DEVICES);
 
@@ -91,20 +93,13 @@ textEffect_t effect[] =
 
 void setup()  {
   Serial.begin(115200);
-
   P.begin();
   P.setInvert(false);
   inStr.reserve(numChars); // reserve for instr serial input
-  pinMode(LED_SW,OUTPUT);
-  digitalWrite(LED_SW,LOW);
-
-/*
-   for (uint8_t i=0; i<L2D; i++)
-   {
-   catalog[i].speed *= P.getSpeed();
-   catalog[i].pause *= 500;
-   }
-*/
+  pinMode(LED_SW1,OUTPUT);
+  digitalWrite(LED_SW1,LOW);
+  pinMode(not_SW1,OUTPUT);
+  digitalWrite(not_SW1,LOW);
 }
 
 void recvWithStartEndMarkers() {
@@ -120,9 +115,7 @@ void recvWithStartEndMarkers() {
       if (rc != endMarker) {
         receivedChars[ndx] = rc;
         ndx++;
-        if (ndx >= numChars) {
-                ndx = numChars - 1;
-        }
+        if (ndx >= numChars) ndx = numChars - 1;
       }
       else {
         receivedChars[ndx] = '\0'; // terminate the string
@@ -137,11 +130,11 @@ void recvWithStartEndMarkers() {
     }
   }
   if (newData == true) {
-          strcpy(tempChars, receivedChars);
-          parseData();
-          // showParsedData();
-          processParsedData();
-          newData = false;
+    strcpy(tempChars, receivedChars);
+    parseData();
+    // showParsedData();
+    processParsedData();
+    newData = false;
   }
 }
 
@@ -150,39 +143,39 @@ void processParsedData() {
   if(line == 0) // Normal commands <0,command,0,0,0,0>
   {
     if (inStr.substring(0,4) == "STOP") { //
-            animation_enable = false;
-            P.displayClear();
-            Serial.println("CMD;STOP;COMPLETED");
+      animation_enable = false;
+      P.displayClear();
+      Serial.println("CMD;STOP;COMPLETED");
     }
 
     if (inStr.substring(0,5) == "START") { //
-            animation_enable = true;
-            Serial.println("CMD;START;COMPLETED");
+      animation_enable = true;
+      Serial.println("CMD;START;COMPLETED");
     }
 
     if (inStr.substring(0,5) == "INIT") { // Clear all Text Buffer
-            asm volatile ("jmp 0");
-            Serial.println("CMD;INIT;COMPLETED");
+      asm volatile ("jmp 0");
+      Serial.println("CMD;INIT;COMPLETED");
     }
 
     if (inStr.substring(0,3) == "LON") { // Turn LED Lighting on
-            digitalWrite(LED_SW,HIGH);
-            Serial.println("CMD;LON;COMPLETED");
+      digitalWrite(LED_SW1,HIGH);
+      Serial.println("CMD;LON;COMPLETED");
     }
 
     if (inStr.substring(0,4) == "LOFF") { // Turn LED Lighting off
-            digitalWrite(LED_SW,LOW);
-            Serial.println("CMD;LOFF;COMPLETED");
+      digitalWrite(LED_SW1,LOW);
+      Serial.println("CMD;LOFF;COMPLETED");
     }
 
     if (inStr.substring(0,4) == "L2ON") { // Turn LED Lighting on
-            digitalWrite(L2_SW,HIGH);
-            Serial.println("CMD;L2ON;COMPLETED");
+      digitalWrite(not_SW1,HIGH);
+      Serial.println("CMD;L2ON;COMPLETED");
     }
 
     if (inStr.substring(0,5) == "L2OFF") { // Turn LED Lighting off
-            digitalWrite(L2_SW,LOW);
-            Serial.println("CMD;L2OFF;COMPLETED");
+      digitalWrite(not_SW1,LOW);
+      Serial.println("CMD;L2OFF;COMPLETED");
     }
 
   }

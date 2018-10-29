@@ -15,9 +15,6 @@
 
 // Hardware SPI connection
 MD_Parola P = MD_Parola(HARDWARE_TYPE, CS_PIN, MAX_DEVICES);
-//MD_Parola P = MD_Parola(CS_PIN, MAX_DEVICES);
-// Arbitrary output pins
-// MD_Parola P = MD_Parola(DATA_PIN, CLK_PIN, CS_PIN, MAX_DEVICES);
 
 #define ARRAY_SIZE(x)  (sizeof(x)/sizeof(x[0]))
 #define SPEED_TIME  25

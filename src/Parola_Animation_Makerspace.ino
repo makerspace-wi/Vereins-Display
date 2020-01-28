@@ -16,11 +16,11 @@
 
     <--- <1,Text,0,0,0,0> show text in (line - 1) until maxLines
 
-  last change: 26.01.2020 by Michael Muehl
+  last change: 28.01.2020 by Michael Muehl
   changed: reduse bus communication nearly zero form display,
            and POR; and Version
 */
-#define Version "1.2.x" // (Test =1.2.x ==> 1.2.1)
+#define Version "1.2.1" // (Test =1.2.x ==> 1.2.1)
 
 #include <Arduino.h>
 #include <MD_Parola.h>
@@ -133,7 +133,7 @@ void setup() {
   // Set default values
   digitalWrite(LED_SW1,LOW);
   digitalWrite(LED_SW2,LOW);
-  Serial.println(String("MAKERDISP") + ";POR" + ";V" + Version);
+  Serial.println("MAKERDISP;POR;V" + String(Version));
 }
 // Setup End -----------------------------------
 

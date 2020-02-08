@@ -21,7 +21,7 @@
   changed: reduse bus communication nearly zero form display,
            and POR; and Version
 */
-#define Version "2.0.x" // (Test =1.0.0 ==> 2.0.0)
+#define Version "2.0.0" // (Test =1.0.0 ==> 2.0.0)
 
 #include <Arduino.h>
 #include <MD_Parola.h>

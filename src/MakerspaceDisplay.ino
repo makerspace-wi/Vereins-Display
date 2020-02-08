@@ -1,13 +1,14 @@
 /* DESCRIPTION
   ====================
-  started on 01JAN2017 - uploaded on 06.01.2017 by Dieter
+/* started on 11DEC2017 - uploaded on 06.01.2018 by Dieter
 
   Commands to Raspi --->
   'OK'  - message received
 
   Commands from Raspi <--- <0,command>
-  'DN'  - Display once
-  'DF'  - Display ofF
+  'GDT' - Get Displayed Text
+  'DAN' - Display Animation on
+  'DAF' - Display Animation ofF
   'INI' - Initialize all new
   'L1N' - Light 1 oN
   'L1F' - Light 1 ofF
@@ -16,11 +17,11 @@
 
     <--- <1,Text,0,0,0,0> show text in (line - 1) until maxLines
 
-  last change: 28.01.2020 by Michael Muehl
+  last change: 07.02.2020 by Michael Muehl
   changed: reduse bus communication nearly zero form display,
            and POR; and Version
 */
-#define Version "1.2.1" // (Test =1.2.x ==> 1.2.1)
+#define Version "2.0.x" // (Test =1.0.0 ==> 2.0.0)
 
 #include <Arduino.h>
 #include <MD_Parola.h>
@@ -133,9 +134,9 @@ void setup() {
   // Set default values
   digitalWrite(LED_SW1,LOW);
   digitalWrite(LED_SW2,LOW);
-  Serial.println("MAKERDISP;POR;V" + String(Version));
+  Serial.println("ms_displ;POR;V" + String(Version));
 }
-// Setup End -----------------------------------
+// Setup End ------------------------------------
 
 // FUNCTIONS ------------------------------------
 void recvWithStartEndMarkers() {
@@ -165,7 +166,6 @@ void recvWithStartEndMarkers() {
   if (newData == true) {
     strcpy(tempChars, receivedChars);
     parseData();
-    // showParsedData();
     processParsedData();
     newData = false;
   }
@@ -174,11 +174,15 @@ void recvWithStartEndMarkers() {
 void processParsedData() {
   inStr = message;
   if (line == 0) { // Normal commands <0,command,0,0,0,0>
-    if (inStr.substring(0,2) == "DN") { // Display oN
+    if (inStr.substring(0,3) == "GDT") { // Get Displayed Text
+      getTextLines();
+    }
+
+    if (inStr.substring(0,3) == "DAN") { // Display oN
       animation_enable = true;
     }
 
-    if (inStr.substring(0,2) == "DF") { // Display ofF
+    if (inStr.substring(0,3) == "DAF") { // Display ofF
       animation_enable = false;
       P.displayClear();
     }
@@ -234,9 +238,18 @@ void parseData() {      // split the data into its parts
   strtokIndx = strtok(NULL, ",");      // this continues where the previous call left off
   outFX = atoi(strtokIndx);    // convert this part to an integer
 }
-// End FUNCTIONS --------------------------------
 
-// Loop -----------------------------------------
+void getTextLines() {
+  for (uint8_t i=0; i<L2D; i++) {
+    Serial.print("L"); Serial.print(i+1); Serial.print(";");
+    Serial.print(lmessage[i]); Serial.print(";");
+    Serial.print(catalog[i].speed); Serial.print(";");
+    Serial.print(catalog[i].pause); Serial.print(";");
+    Serial.print(catalog[i].inFX); Serial.print(";");
+    Serial.println(catalog[i].outFX);
+  }
+}
+
 void loop() {
   recvWithStartEndMarkers(); // look for any commands
   if (animation_enable == true) {

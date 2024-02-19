@@ -18,7 +18,7 @@
     <--- <1,Text,0,0,0,0> show text in (line - 1) until maxLines
 
   last change: 07.02.2020 by Michael Muehl
-  changed: reduse bus communication nearly zero form display,
+  changed: reduce bus communication nearly zero from display,
            and POR; and Version
 */
 #define Version "2.0.0" // (Test =1.0.0 ==> 2.0.0)

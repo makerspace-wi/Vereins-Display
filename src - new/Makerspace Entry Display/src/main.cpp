@@ -1,5 +1,5 @@
 /*
-MQTT-Commands
+MQTT-Commands - Makerspace Display an der Eingangstüre - Prozessor ESP8266 (WEMOS D1 mini)
 
 6 * Topic "setdisplay/lineX", wobei X die Zeilennummer ist (0-5)
 Beispiel: Send payload: "Das ist die erste Zeile" an topic "setdisplay/line0" - um den Text für Zeile 1 zu setzen

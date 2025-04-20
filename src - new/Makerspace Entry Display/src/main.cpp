@@ -32,14 +32,6 @@ PUBLISHED Values:
 #include <ElegantOTA.h>
 #include <ArduinoJson.h>
 
-// WiFi und MQTT Einstellungen
-const char *ssid = "HAUDE_NET";
-const char *password = "6408636750237785";
-const char *mqtt_server = "192.168.0.5";
-const int mqtt_port = 1883;
-const char *mqtt_user = "";
-const char *mqtt_password = "";
-
 WiFiClient espClient;
 PubSubClient client(espClient);
 

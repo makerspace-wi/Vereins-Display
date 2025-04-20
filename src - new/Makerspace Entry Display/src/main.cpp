@@ -19,9 +19,8 @@ PUBLISHED Values:
 * swRev - z.B. 3.4
 * hwRev - z.B. 2.0
 * status - online oder offline
-
-
 */
+
 #include <Arduino.h>
 #include <MD_Parola.h>
 #include <MD_MAX72xx.h>
